@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import {FunctionComponent, useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
-import Button from '../components/Button';
+import {Button} from "../components/Button.tsx";
 
 const introduceMentions = [
   "안녕? 나는 인공지능 비서 라봉이야~!",
@@ -8,7 +8,7 @@ const introduceMentions = [
   "우주를 탐험할 멋진 아이디어를 세상에 보여주자!"
 ];
 
-const Home: React.FC = () => {
+const Home: FunctionComponent = () => {
   const [introduceText, setIntroduceText] = useState<string>(introduceMentions[0]); // 초기 멘트 설정
   const [currentMentionIndex, setCurrentMentionIndex] = useState<number>(0); // 인덱스 상태
 
