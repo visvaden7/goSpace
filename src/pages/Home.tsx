@@ -1,6 +1,7 @@
 import {FunctionComponent, useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 import {Button} from "../components/Button.tsx";
+import character from '../assets/images/haru.png'
 
 const introduceMentions = [
   "안녕? 나는 인공지능 비서 라봉이야~!",
@@ -23,10 +24,15 @@ const Home: FunctionComponent = () => {
   }, [currentMentionIndex]); // currentMentionIndex가 변경될 때마다 실행
 
   return (
-    <div className="flex items-center justify-center h-screen"> {/* Flexbox로 중앙 정렬 */}
-      <div className='w-10 bg-red-100 text-center p-4'> {/* 텍스트 중앙 정렬 및 패딩 추가 */}
-        <h1>메인 페이지</h1>
-        <div>{introduceText}</div> {/* 문자열을 JSX로 렌더링 */}
+    <div className="flex items-center justify-center w-[50%] mx-auto h-screen"> {/* Flexbox로 중앙 정렬 */}
+      <div className='w-full text-center p-4'> {/* 텍스트 중앙 정렬 및 패딩 추가 */}
+        <div className='flex items-center'>
+          <img src={character} alt={'character'}/>
+          <div className='bg-pink-400 rounded-full p-10'>
+            <h1>{introduceText}</h1> {/* 문자열을 JSX로 렌더링 */}
+          </div>
+        </div>
+        
         <Link to='/chatbot'> {/* Link 컴포넌트 사용 */}
           <Button label='시작' onClick={() => {}} /> {/* onClick은 필요 없지만, 유지 */}
         </Link>
