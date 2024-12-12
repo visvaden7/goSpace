@@ -1,7 +1,7 @@
 import {Message} from "../@types/domain.ts";
 import OpenAI from "openai";
-import {systemMessage, userSettingMessage, YOUR_OPENAI_API_KEY} from "../const/const.ts";
-
+import {createMdSystemMessage, systemMessage, userSettingMessage, YOUR_OPENAI_API_KEY} from "../const/const.ts";
+// const MAX_HISTORY = 25;
 
 /*
 error list:
@@ -15,16 +15,21 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
-export const responseChat = async (chat: string) => {
+export const responseChat = async (chat: Message[]) => {
+  console.log("chat",chat)
   const messages: Message[] = [
-    {role: 'system', content: systemMessage},
-    {role: 'user', content: `${userSettingMessage} ${chat}`}
+    {role: 'system', content: `${systemMessage}${userSettingMessage}`},
+    ...chat
   ]
   try {
+    // if (messages.length > MAX_HISTORY) {
+    //   messages.splice(0, messages.length-MAX_HISTORY)
+    // }
+    console.log('chat2',messages);
     const response = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: messages,
-      max_tokens: 300,
+      // max_tokens: 500,
     })
     
     return response.choices[0].message.content?.trim();
@@ -32,6 +37,8 @@ export const responseChat = async (chat: string) => {
     console.error('OpenAPI error 1: ', err);
   }
 }
+
+
 
 export const validateContext = async (conservationHistory: Message[]) => {
   try {
@@ -45,6 +52,25 @@ export const validateContext = async (conservationHistory: Message[]) => {
     console.error('OpenAPI error 2: ', err);
   }
 }
+
+export const createMd = async (chat: string) => {
+  const messages: Message[] = [
+    {role: 'system' ,content: createMdSystemMessage},
+    {role: 'user' ,content: chat}
+  ]
+  try {
+    console.log('check test')
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4o',
+      messages: messages
+    })
+    console.log('성공')
+    return response.choices[0].message.content?.trim();
+  } catch (err) {
+    console.error('OpenAPI error 3: ', err);
+  }
+}
+
 //
 // // OpenAI API 설정
 //
