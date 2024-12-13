@@ -1,11 +1,12 @@
-import React from 'react';
+import {FunctionComponent} from 'react';
 import {Link} from "react-router-dom";
+import logo from '/src/assets/images/goSpace_logo.svg'
 
-const Header: React.FC = () => {
+const Header: FunctionComponent = () => {
     return (
-        <header className="fixed top-0 left-0 w-full bg-white shadow p-4 z-10">
+        <header className="fixed top-0 left-0 w-full h-[80px] shadow z-10 flex justify-center items-center">
           <Link to={'/'}>
-            <h1 className="text-xl text-black font-bold">수학여행을 우주로 가자</h1>
+            <img src={logo} alt={'logo'} className={''}/>
           </Link>
         </header>
     );

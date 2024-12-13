@@ -3,7 +3,7 @@ import {Message} from '../@types/domain.ts';
 import {chatbotBlockStylesByRole, initMessage} from "../const/const.ts";
 import {Button} from "./Button.tsx";
 import {responseChat} from "../api/ChatbotApi.ts";
-import character from '/images/haru.png'
+import character from './../assets/images/haru.png'
 import { useNavigate } from 'react-router-dom'
 
 export const Chatbot: FunctionComponent = () => {
@@ -25,12 +25,15 @@ export const Chatbot: FunctionComponent = () => {
     const trimmedInput = input.trim()
     
     if (trimmedInput){
-      setMessages(prev => [...prev, {role: 'user', content: input}]);
+      const updatedMessages:Message[] = [
+        ...messages,
+        { role: 'user', content: trimmedInput }
+      ];
+      setMessages(updatedMessages);
       setInput(''); // 입력창 초기
       
       // const botResponse = await responseChat(`questionList : ${questionMapping[matchedKeyword]} input: ${trimmedInput}`);
-      
-      const botResponse = await responseChat(messages);
+      const botResponse = await responseChat(updatedMessages);
       if(botResponse) {
         if(botResponse.includes('결과정리')){
           navigate('/results',{state: {response: botResponse}})
@@ -64,8 +67,8 @@ export const Chatbot: FunctionComponent = () => {
       <div className='absolute left-[2%] top-[25%] w-[20%]'>
         <img src={character} alt={'character'}/>
       </div>
-      <div className="flex flex-col w-[50%] mx-auto mt-40 p-4 from-black to-transparent rounded shadow-lg">
-        <div className="responses mb-4 h-[50vh] overflow-y-scroll max-h-[50%]" ref={conservationContainerRef}>
+      <div className="flex flex-col w-[960px] h-[836px] mx-auto mt-[42px] bg-gradient-to-b from-[#FFFFFF] to-[#DCCDFF] text-black rounded-[43px] shadow-2xl p-4">
+        <div className="responses mb-4 h-full overflow-y-scroll" ref={conservationContainerRef}>
           {messages.map((response, index) => {
             if (response.role === 'system') {
               return null; // 시스템 메시지는 렌더링하지 않음
@@ -90,18 +93,18 @@ export const Chatbot: FunctionComponent = () => {
           })}
         </div>
         
-        <div className={'flex gap-2'}>
+        <div className={'flex w-[100%] h-[70px] mb-[15px] mx-auto'}>
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="질문을 입력하세요..."
-            className="border p-2 rounded w-full mb-2"
+            className="border p-2 rounded w-full"
             onKeyDown={handleKeyDown}
             onCompositionStart={handleCompositionStart}
             onCompositionEnd={handleCompositionEnd}
           />
-          <Button onClick={handleQuestion} label={'질문하기'}/>
+          <Button onClick={handleQuestion} label={'질문하기'} className={'w-[150px] font-[20px] bg-[#7744ED] text-white'}/>
         </div>
       </div>
     </>

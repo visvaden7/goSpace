@@ -34,7 +34,7 @@ const Home: FunctionComponent = () => {
         </div>
         
         <Link to='/chatbot'> {/* Link 컴포넌트 사용 */}
-          <Button label='시작' onClick={() => {}} /> {/* onClick은 필요 없지만, 유지 */}
+          <Button label='시작해볼까?' className={'bg-gradient-to-r from-[#FFFB72] to-[#D3B600] text-black w-[150px] rounded-2xl'} onClick={() => {}} /> {/* onClick은 필요 없지만, 유지 */}
         </Link>
       </div>
     </div>
