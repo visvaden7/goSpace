@@ -1,41 +1,93 @@
-import {FunctionComponent, useEffect, useState} from 'react';
+import { FunctionComponent, useState } from 'react';
 import { Link } from 'react-router-dom';
-import {Button} from "../components/Button.tsx";
-import character from '../assets/images/haru.png'
+import { Button } from '../components/Button.tsx';
+import character1 from '../assets/images/charac1.png';
+import character2 from '../assets/images/charac2.png';
+import goSpaceButton from '../assets/images/goSpace.png';
 
 const introduceMentions = [
-  "안녕? 나는 인공지능 비서 라봉이야~!",
-  "너희가 멋진 발표를 할 수 있도록 내가 옆에서 도와줄게!",
-  "우주를 탐험할 멋진 아이디어를 세상에 보여주자!"
+  <>
+    안녕? 나는 <span className="text-[#7744ED]">인공지능 비서 라봉이야~!</span>
+    <br/>
+    너희가 멋진 발표를 할 수 있도록
+    <br/>
+    내가 옆에서 도와줄게!
+    <br/>
+    <br/>
+    우주를 탐험할 멋진 아이디어를
+    <br/>
+    세상에 보여주자!
+  </>,
+  <>
+    내 역할은 아주 간단해!<br/>
+    너희가 만든 제품의 중요한 키워드를 모아서,<br/>
+    깔끔한 보고서로 만들어줄게.<br/><br/>
+    <span className="text-[#7744ED]">자 이제 발표 준비를 해보자!</span>
+  </>
+
 ];
 
 const Home: FunctionComponent = () => {
-  const [introduceText, setIntroduceText] = useState<string>(introduceMentions[0]); // 초기 멘트 설정
-  const [currentMentionIndex, setCurrentMentionIndex] = useState<number>(0); // 인덱스 상태
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const nextIndex = (currentMentionIndex + 1) % introduceMentions.length; // 다음 인덱스 계산
-      setIntroduceText(introduceMentions[nextIndex]); // 다음 멘트 설정
-      setCurrentMentionIndex(nextIndex); // 인덱스 업데이트
-    }, 2000); // 2초 간격으로 변경
-
-    return () => clearInterval(timer); // 컴포넌트 언마운트 시 타이머 정리
-  }, [currentMentionIndex]); // currentMentionIndex가 변경될 때마다 실행
-
+  const [introduceText, setIntroduction] = useState(introduceMentions[0]);
+  const [isNext, setIsNext] = useState(true);
+  
+  const handleNext = () => {
+    setIsNext(false)
+    setIntroduction(introduceMentions[1])
+  }
+  
   return (
-    <div className="flex items-center justify-center w-[50%] mx-auto h-screen"> {/* Flexbox로 중앙 정렬 */}
-      <div className='w-full text-center p-4'> {/* 텍스트 중앙 정렬 및 패딩 추가 */}
-        <div className='flex items-center'>
-          <img src={character} alt={'character'}/>
-          <div className='bg-pink-400 rounded-full p-10'>
-            <h1>{introduceText}</h1> {/* 문자열을 JSX로 렌더링 */}
-          </div>
+    <div className="flex justify-center h-[800px] relative overflow-hidden mt-[120px]">
+      {/* 캐릭터 이미지 */}
+      {isNext
+        ? (
+          <img
+          src={character1}
+          alt="character"
+          className="absolute top-[44%] left-[27%] z-10"
+        />
+        ) : (
+          <img
+            src={character2}
+            alt="character"
+            className="absolute top-[44%] right-[25%] z-10"
+          />
+        )
+      }
+      
+      
+      {/* 텍스트 박스 */}
+      <div
+        className="flex items-center justify-center w-[960px] h-[540px] bg-gradient-to-b from-[#FFFFFF] to-[#DCCDFF] text-black rounded-[43px] border-[10px] border-[#AD83FF] shadow-2xl p-8">
+        <div className="whitespace-pre-line text-[40px] font-bold leading-[60px] text-center">
+          {introduceText}
         </div>
-        
-        <Link to='/chatbot'> {/* Link 컴포넌트 사용 */}
-          <Button label='시작해볼까?' className={'bg-gradient-to-r from-[#FFFB72] to-[#D3B600] text-black w-[150px] rounded-2xl'} onClick={() => {}} /> {/* onClick은 필요 없지만, 유지 */}
-        </Link>
+      </div>
+      
+      {/* 버튼 및 이미지 */}
+      <div className="absolute bottom-[10%] flex flex-col items-center">
+        <img
+          src={goSpaceButton}
+          alt="goSpaceButton"
+          className="w-[100px] mb-[-6%] z-10"
+        />
+        {isNext ? (
+          // isNext가 true인 경우
+          <Button
+            label="시작해볼까?"
+            className="w-[296px] h-[86px] bg-gradient-to-br from-[#FFFB72] to-[#D3B600] text-black font-bold text-2xl rounded-[43px] shadow-lg hover:shadow-2xl"
+            onClick={handleNext}
+          />
+        ) : (
+          // isNext가 false인 경우
+          <Link to="/chatbot">
+            <Button
+              label="하루와 PPT 만들기"
+              className="w-[296px] h-[86px] bg-gradient-to-br from-[#FFFB72] to-[#D3B600] text-black font-bold text-2xl rounded-[43px] shadow-lg hover:shadow-2xl"
+              onClick={() => setIsNext(false)}
+            />
+          </Link>
+        )}
       </div>
     </div>
   );
