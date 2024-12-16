@@ -1,8 +1,9 @@
 import {useState} from "react";
 import {Button} from "./Button.tsx";
-// import mockUpImage from "/src/assets/images/astranaut_profile1.png";
+
 import {generateImage} from "../api/generateImageApi.ts";
 import {summaryContext} from "../api/ChatbotApi.ts";
+import reload from '../assets/images/ic_undo@2x.png'
 
 interface Props {
   contents: {
@@ -35,39 +36,39 @@ export const ContentEditor = ({contents: {text, idx}, onEdit, onImageAdd}:Props)
     setIsText(!isText)
     setIsReadOnly(true);
     const response = await generateImage(prompt)
-    if(response)onImageAdd(response)
+    if(response) onImageAdd(response)
     if(response) setImageList(prev => [...prev, response])
   }
+  
   return (
-    <div className={'flex gap-[47px]'}>
+    <div className={'flex justify-between'}>
       <textarea
         defaultValue={text}
         onChange={(e) => onEdit(e.target.value, idx)}
         className={
-          'w-[512px] h-[172px] bg-[#EDEDED] resize-none p-4 rounded-lg'
+          'w-[512px] h-[346px] bg-[#EDEDED] text-black resize-none p-4'
         }
         readOnly={isReadOnly}
       />
       
       {
         isText ? (
-          <div className={'w-[30%] flex justify-between'}>
+          <div className={'w-[346px] flex justify-end items-center'}>
             <Button label={isReadOnly ? '수정하고 싶어요' : '수정X'}
-                    className={'w-[160px] aspect-[1/1] bg-[#F9F162] rounded-full'}
+                    className={'w-[160px] h-[160px] bg-[#F9F162] rounded-full'}
                     onClick={() => setIsReadOnly(!isReadOnly)}/>
-            <Button label={'완벽해요'} className={'w-[160px] aspect-[1/1] bg-[#7744ED] rounded-full ml-[20px]'}
+            <Button label={'완벽해요'} className={'w-[160px] h-[160px] bg-[#7744ED] rounded-full ml-[20px]'}
                     onClick={() => handleChangeContent(text)}/>
           </div>
         ) : (
-          <div className={'flex'}>
-            <div>
-              <img src={imageList[imageList.length - 1]} alt="" className={'w-[300px]'}/>
+          <div className={'flex flex-col justify-end'}>
+            <div className={''}>
+              <img src={imageList[imageList.length - 1]} alt="" className={'w-[346px] aspect-square'}/>
             </div>
-            <Button label={'(이미지)새로고침'} className={'w-[160px] aspect-[1/1] bg-[#F9F162] rounded-full'}
-                    onClick={() => createImage(text)}/>
-            <Button label={'(이미지)완벽해요'} className={'w-[160px] aspect-[1/1] bg-[#7744ED] rounded-full'}
-                    onClick={() => console.log('완벽')}/>
-            {imageList.length} / 3
+            <div className={'flex justify-end mt-[12px]'} onClick={() => createImage(text)}>
+              <img src={reload} alt={'reload'} className={'w-[24px] h-[24px]'}/>
+              <p>{imageList.length} / 3</p>
+            </div>
           </div>
         )
       }

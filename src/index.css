@@ -36,6 +36,17 @@ body {
   background: #2A1A66 url("/src/assets/images/goSpace_background.png") center 30% / 120% no-repeat;
 }
 
+@layer utilities {
+  /* 웹킷 기반 스크롤바 숨기기 */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Firefox에서 스크롤바 숨기기 */
+  .no-scrollbar {
+    scrollbar-width: none; /* Firefox */
+  }
+}
 
 
 h1 {

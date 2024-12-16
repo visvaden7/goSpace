@@ -7,5 +7,5 @@ interface ButtonProps {
 }
 
 export const Button: FunctionComponent<ButtonProps> = ({ label, className, onClick }) => {
-    return <button onClick={onClick} className={className}>{label}</button>;
+    return <button onClick={onClick} className={className}><strong>{label}</strong></button>;
 };

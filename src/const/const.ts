@@ -190,7 +190,7 @@ export const createPressSystemMessage =
   "# 출력 형식\n" +
   "1. 결과는 배열 형태로 작성.  \n" +
   "2. 배열은 \"기사제목\", \"기사개요\", \"기사본문\"으로 구성된 객체를 포함.  \n" +
-  "2. \"기사제목\", \"기사개요\"은 8글자 이내로, \"기사본문\"은 20글자 이상으로 작성.  \n" +
+  "2. \"기사제목\", \"기사개요\"은 8글자 이내로 작성, \"기사본문\"은 20글자 이상으로 작성.  \n" +
   "3. 출력은 아래 예시를 참고하여 작성.  \n" +
   "\n" +
   "# 출력 예시\n" +
@@ -231,12 +231,12 @@ export const assistantChar = '하루'
 
 export const chatbotBlockStylesByRole = {
   assistant: {
-    messageClass: 'chatbot-message justify-start bg-[#7744ED] text-white',
+    messageClass: 'chatbot-message justify-start bg-[#7744ED] text-white text-left',
     userLabel: assistantChar,
     profile: '/data/haru_profile.png',
   },
   user: {
-    messageClass: 'chatbot-message justify-end bg-[#F7EE5C] text-black',
+    messageClass: 'chatbot-message justify-end bg-[#F7EE5C] text-black text-right',
     userLabel: '사용자',
     profile: '/data/astranaut_profile1.png'
   },
