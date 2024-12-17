@@ -59,7 +59,7 @@ const Home: FunctionComponent = () => {
       {/* 텍스트 박스 */}
       <div
         className="flex items-center justify-center w-[960px] h-[540px] bg-gradient-to-b from-[#FFFFFF] to-[#DCCDFF] text-black rounded-[43px] border-[10px] border-[#AD83FF] shadow-2xl p-8">
-        <div className="whitespace-pre-line text-[40px] font-bold leading-[60px] text-center">
+        <div className="whitespace-pre-line font-nanumSquare text-[40px] font-bold leading-[60px] text-center">
           {introduceText}
         </div>
       </div>

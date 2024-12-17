@@ -42,9 +42,7 @@ export const Results: FunctionComponent = () => {
   
   return (
     <div>
-      <p className={'mb-[30px] mt-[40px] text-[40px] text-center'}>이렇게 정리해봤는데 어때?</p>
-      {/*<p className={'text-white'}>결과 내용 : {response}</p>*/}
-      {/*<p className={'text-white'}>123{contents}</p>*/}
+      <p className={'mb-[30px] mt-[40px] text-[40px] text-center text-white'}>이렇게 정리해봤는데 어때?</p>
       <img src={character1} alt={'haru'} className={'absolute'}/>
       <div className={'flex flex-col w-[960px] h-[836px] bg-white p-[40px] rounded-[30px] gap-10 mx-auto overflow-scroll no-scrollbar'}>
         {contents.map((content, idx) => {
