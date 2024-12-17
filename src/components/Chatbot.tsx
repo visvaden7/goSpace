@@ -85,7 +85,7 @@ export const Chatbot: FunctionComponent = () => {
                   alt="profile"
                   className={profileClass}
                 />
-                <p className={`${messageClass} w-[603px] text-[18px] p-[16px] rounded`}>
+                <p className={`${messageClass} max-w-[603px] text-[18px] p-[16px] rounded-[8px]`}>
                   <strong>{userLabel}</strong> {response.content}
                 </p>
               </div>
