@@ -11,15 +11,18 @@ export const Results: FunctionComponent = () => {
   const navigate = useNavigate()
   const [contents, setContents] = useState<string[]>([]);
   const [imageList, setImageList] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false)
   
   useEffect(() => {
     if (response) {
+      setIsLoading(true)
       createMd(response).then(res => {
         if (res) {
           let result = ''
           result += res
           const slides = result.split('---')
           setContents(slides)
+          setIsLoading(false)
         } else {
           console.log('데이터가 없습니다.')
         }
@@ -42,17 +45,27 @@ export const Results: FunctionComponent = () => {
   
   return (
     <div>
-      <p className={'mb-[30px] mt-[40px] text-[40px] text-center text-white'}>이렇게 정리해봤는데 어때?</p>
-      <img src={character1} alt={'haru'} className={'absolute'}/>
-      <div className={'flex flex-col w-[960px] h-[836px] bg-white p-[40px] rounded-[30px] gap-10 mx-auto overflow-scroll no-scrollbar'}>
-        {contents.map((content, idx) => {
-          return (
-            <ContentEditor contents={{text: content.trim(), idx: idx}} onEdit={handleEditContents}
-                           onImageAdd={(image:string) => setImageList(prev => [...prev, image])} key={idx}/>
-          )
-        })}
-        <Button label={'모두 완벽해요'} onClick={handleSendData} className={'bg-[#9162FF] text-white h-[40px]'}/>
-      </div>
+      {isLoading ?
+        (
+          <div className={'flex flex-col w-[960px] h-[836px] bg-white rounded-[30px] mx-auto overflow-hidden'}>
+            <img src={'/data/loading.gif'} alt={'loading'} className={'bg-cover'}/>
+          </div>
+        ) : (
+          <div>
+            <p className={'mb-[30px] mt-[40px] text-[40px] text-center text-white'}>이렇게 정리해봤는데 어때?</p>
+            <img src={character1} alt={'haru'} className={'absolute bottom-[40%] left-[10%]'}/>
+            <div
+              className={'flex flex-col w-[960px] h-[836px] bg-white p-[40px] rounded-[30px] gap-10 mx-auto overflow-scroll'}>
+              {contents.map((content, idx) => {
+                return (
+                  <ContentEditor contents={{text: content.trim(), idx: idx}} onEdit={handleEditContents}
+                                 onImageAdd={(image: string) => setImageList(prev => [...prev, image])} key={idx}/>
+                )
+              })}
+              <Button label={'모두 완벽해요'} onClick={handleSendData} className={'bg-[#9162FF] text-white h-[80px]'}/>
+            </div>
+          </div>
+        )}
     </div>
   );
 };

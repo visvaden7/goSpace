@@ -7,7 +7,7 @@ import goSpaceButton from '../assets/images/goSpace.png';
 
 const introduceMentions = [
   <>
-    안녕? 나는 <span className="text-[#7744ED]">인공지능 비서 라봉이야~!</span>
+    안녕? 나는 <span className="text-[#7744ED]">인공지능 비서 하루야~!</span>
     <br/>
     너희가 멋진 발표를 할 수 있도록
     <br/>
