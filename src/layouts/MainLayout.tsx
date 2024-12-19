@@ -1,14 +1,11 @@
-import React from 'react';
+import {FunctionComponent, ReactNode} from 'react';
 import Header from '../components/Header';
-// import Footer from '../components/Footer';
 
-export const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const backgroundImg = "bg-[url('/goTravel')]"
+export const MainLayout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
     return (
-        <div className={`w-screen h-screen flex flex-col ${backgroundImg} bg-cover bg-center h-screen w-full`}>
+        <div className={`w-screen h-screen flex flex-col`}>
             <Header />
             <main className="flex-grow mt-[80px]">{children}</main>
-            {/*<Footer />*/}
         </div>
     );
 };

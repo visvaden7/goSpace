@@ -1,7 +1,9 @@
-import { FunctionComponent, useState } from 'react';
+import {FunctionComponent, useEffect, useState} from 'react';
 import { Button } from '../components/Button.tsx';
 import character1 from '../assets/images/charac1.png';
 import goSpaceButton from '../assets/images/goSpace.png';
+import {useLocation} from "react-router-dom";
+import {downloadFilesAsZip} from "../utils/fileDownload.ts";
 
 
 
@@ -11,15 +13,29 @@ const introduceMentions = [
     내일 발표 잘 할거라고 생각해 <br/>
     <br/>
     언제든지 보고서 도우미가 필요하면 <br/>
-    AI하르를 불러줘!<br/>
+    AI하루를 불러줘!<br/>
   </>
 ];
 
 export const Download: FunctionComponent = () => {
-  const [introduceText, setIntroduction] = useState(introduceMentions[0]);
+  const location = useLocation()
+  const text = location.state.response.contents
+  const imageList = location.state.response.imageList
+  
+  const [introduceText] = useState(introduceMentions[0]);
+  
+  useEffect(() => {
+    console.log("test",location)
+    console.log(text)
+    console.log(imageList)
+  }, []);
   
   const handleDownload = () => {
-    setIntroduction(introduceMentions[1])
+    console.log("test",location)
+    console.log(text)
+    console.log(imageList)
+    downloadFilesAsZip(typeof(text) === 'string' ? text : text.join(), imageList).then(res => console.log(res) )
+    // setIntroduction(introduceMentions[1])
   }
   
   return (
@@ -30,11 +46,12 @@ export const Download: FunctionComponent = () => {
             alt="character"
             className="absolute top-[44%] left-[27%] z-10"
           />
-
-      {/* 텍스트 박스 */}
-      <div
+      {/*<p className={'text-white'}>{text}</p>*/}
+      {/*<p className={'text-white'}>{imageList}</p>*/}
+        {/* 텍스트 박스 */}
+        <div
         className="flex items-center justify-center w-[960px] h-[540px] bg-gradient-to-b from-[#FFFFFF] to-[#DCCDFF] text-black rounded-[43px] border-[10px] border-[#AD83FF] shadow-2xl p-8">
-        <div className="whitespace-pre-line font-nanumSquare text-[40px] font-bold leading-[60px] text-center">
+        <div className="whitespace-pre-line font-nanumSquareRound font-extrabold text-[40px] leading-[60px] text-center">
           {introduceText}
         </div>
       </div>

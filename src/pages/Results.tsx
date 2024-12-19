@@ -52,17 +52,16 @@ export const Results: FunctionComponent = () => {
           </div>
         ) : (
           <div>
-            <p className={'mb-[30px] mt-[40px] text-[40px] text-center text-white'}>이렇게 정리해봤는데 어때?</p>
+            <p className={'mb-[30px] mt-[40px] text-[40px] font-nanumSquareRound text-center text-white'}>이렇게 정리해봤는데 어때?</p>
             <img src={character1} alt={'haru'} className={'absolute bottom-[40%] left-[10%]'}/>
-            <div
-              className={'flex flex-col w-[960px] h-[836px] bg-white p-[40px] rounded-[30px] gap-10 mx-auto overflow-scroll'}>
+            <div className={'flex flex-col w-[960px] h-[836px] bg-white p-[40px] rounded-[30px] gap-10 mx-auto overflow-y-scroll'}>
               {contents.map((content, idx) => {
                 return (
                   <ContentEditor contents={{text: content.trim(), idx: idx}} onEdit={handleEditContents}
                                  onImageAdd={(image: string) => setImageList(prev => [...prev, image])} key={idx}/>
                 )
               })}
-              <Button label={'모두 완벽해요'} onClick={handleSendData} className={'bg-[#9162FF] text-white h-[80px]'}/>
+              <Button label={'모두 완벽해요'} onClick={handleSendData} className={'bg-[#9162FF] rounded-[30px] text-white min-h-[64px]'}/>
             </div>
           </div>
         )}

@@ -85,8 +85,8 @@ export const Chatbot: FunctionComponent = () => {
                   alt="profile"
                   className={profileClass}
                 />
-                <p className={`${messageClass} max-w-[603px] text-[18px] p-[16px] rounded-[8px]`}>
-                  <strong>{userLabel}</strong> {response.content}
+                <p className={`${messageClass} font-pretendard max-w-[603px] text-[18px] p-[16px] rounded-[8px] break-keep`}>
+                  <strong>{userLabel === '사용자' ? '': userLabel}</strong> {response.content}
                 </p>
               </div>
             );
@@ -99,12 +99,12 @@ export const Chatbot: FunctionComponent = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="질문을 입력하세요."
-            className="p-2 w-full bg-white"
+            className="p-4 w-full bg-white font-pretendard"
             onKeyDown={handleKeyDown}
             onCompositionStart={handleCompositionStart}
             onCompositionEnd={handleCompositionEnd}
           />
-          <Button onClick={handleQuestion} label={'질문하기'} className={'w-[150px] font-[20px] bg-[#7744ED] text-white'}/>
+          <Button onClick={handleQuestion} label={'보내기'} className={'w-[150px] font-[20px] bg-[#7744ED] text-white font-pretendard'}/>
         </div>
       </div>
     </>
