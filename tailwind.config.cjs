@@ -9,7 +9,7 @@ module.exports = {
     extend: {
       fontFamily: {
         pretendard: ['Pretendard', ...defaultTheme.fontFamily.sans],
-        nanumSquare: ['"NanumSquare"', ...defaultTheme.fontFamily.sans],
+        nanumSquareRound: ['"NanumSquareRoundExtraBold"', ...defaultTheme.fontFamily.sans],
       },
     },
   },
