@@ -47,12 +47,12 @@ export const Results: FunctionComponent = () => {
     <div>
       {isLoading ?
         (
-          <div className={'flex flex-col w-[960px] h-[836px] bg-white rounded-[30px] mx-auto overflow-hidden'}>
-            <img src={'/data/loading.gif'} alt={'loading'} className={'bg-cover'}/>
+          <div className={'flex w-[960px] h-[836px] bg-white rounded-[30px] mx-auto overflow-hidden items-center justify-center'}>
+            <img src={'/data/loading.gif'} alt={'loading'} className={'w-full h-full bg-cover'}/>
           </div>
         ) : (
           <div>
-            <p className={'mb-[30px] mt-[40px] text-[40px] font-nanumSquareRound text-center text-white'}>이렇게 정리해봤는데 어때?</p>
+            <p className={'mb-[30px] mt-[40px] text-[40px] font-nanumSquareRound font-extrabold text-center text-white'}>이렇게 정리해봤는데 어때?</p>
             <img src={character1} alt={'haru'} className={'absolute bottom-[40%] left-[10%]'}/>
             <div className={'flex flex-col w-[960px] h-[836px] bg-white p-[40px] rounded-[30px] gap-10 mx-auto overflow-y-scroll'}>
               {contents.map((content, idx) => {
