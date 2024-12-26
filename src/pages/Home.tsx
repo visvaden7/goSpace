@@ -1,9 +1,9 @@
-import { FunctionComponent, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from '../components/Button.tsx';
-import character1 from '../assets/images/charac1.png';
-import character2 from '../assets/images/charac2.png';
-import goSpaceButton from '../assets/images/goSpace.png';
+import {FunctionComponent, useState} from 'react';
+import {Link} from 'react-router-dom';
+import {Button} from '../components/Button.tsx';
+import character1 from '../assets/images/charac1.svg';
+import character2 from '../assets/images/charac2.svg';
+import goSpaceButton from '../assets/images/goSpace.svg';
 
 const introduceMentions = [
   <>
@@ -35,20 +35,20 @@ const Home: FunctionComponent = () => {
   }
   
   return (
-    <div className="flex justify-center h-[800px] relative overflow-hidden mt-[120px]">
+    <div className="flex justify-center h-[86%] relative overflow-hidden mt-[5.65%]">
       {/* 캐릭터 이미지 */}
       {isNext
         ? (
           <img
-          src={character1}
-          alt="character"
-          className="absolute top-[44%] left-[27%] z-10"
-        />
+            src={character1}
+            alt="character"
+            className="absolute top-[45%] left-[27%] z-10 animate-floating"
+          />
         ) : (
           <img
             src={character2}
             alt="character"
-            className="absolute top-[44%] right-[25%] z-10"
+            className="absolute top-[45%] right-[27%] z-10 animate-floating"
           />
         )
       }
@@ -56,7 +56,7 @@ const Home: FunctionComponent = () => {
       
       {/* 텍스트 박스 */}
       <div
-        className="flex items-center justify-center w-[960px] h-[540px] bg-gradient-to-b from-[#FFFFFF] to-[#DCCDFF] text-black rounded-[43px] border-[10px] border-[#AD83FF] shadow-2xl p-8">
+        className="flex items-center justify-center w-[960px] h-[540px] bg-gradient-to-b from-[#FFFFFF] to-[#DCCDFF] text-black rounded-[43px] border-[10px] border-[#AD83FF] shadow-custom-xl p-8">
         <div className="whitespace-pre-line font-nanumSquareRound font-extrabold text-[40px] leading-[60px] text-center">
           {introduceText}
         </div>

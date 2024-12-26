@@ -63,30 +63,34 @@ export const Chatbot: FunctionComponent = () => {
   };
   
   return (
-    <>
-      <div className='absolute left-[2%] top-[25%] w-[20%]'>
+    <div className={'relative'}>
+      <div className='absolute w-[30%] left-[0%] top-[10%] animate-slow-floating-rotating'>
         <img src={character} alt={'character'}/>
       </div>
-      <div className="flex flex-col w-[960px] h-[836px] mx-auto mt-[42px] bg-gradient-to-b from-[#FFFFFF] to-[#DCCDFF] text-black rounded-[30px] shadow-2xl p-4">
+      <div
+        className="relative flex flex-col w-[960px] h-[836px] mx-auto mt-[42px] bg-gradient-to-b from-[#FFFFFF] to-[#DCCDFF] text-black rounded-[30px] shadow-2xl p-4">
         <div className="responses my-10 h-full overflow-y-scroll" ref={conservationContainerRef}>
           {messages.map((response, index) => {
             if (response.role === 'system') {
-              return null; // 시스템 메시지는 렌더링하지 않음
+              return null;
             }
+            
             const isAssistant = response.role === 'assistant'
             const {messageClass, userLabel, profile} = chatbotBlockStylesByRole[response.role] || {}
             const profileClass = 'chatbot-profile rounded-full w-[100px]';
             
             return (
-              <div className={`flex items-center gap-6 mb-[67px] mx-10 ${isAssistant ? 'flex-row' : 'flex-row-reverse'}`}
-                   key={index}>
+              <div
+                className={`flex items-center gap-6 mb-[67px] mx-10 ${isAssistant ? 'flex-row' : 'flex-row-reverse'}`}
+                key={index}>
                 <img
                   src={profile}
                   alt="profile"
                   className={profileClass}
                 />
-                <p className={`${messageClass} font-pretendard max-w-[603px] text-[18px] p-[16px] rounded-[8px] break-keep`}>
-                  <strong>{userLabel === '사용자' ? '': userLabel}</strong> {response.content}
+                <p
+                  className={`${messageClass} font-pretendard max-w-[603px] text-[18px] p-[16px] rounded-[8px] break-keep`}>
+                  <strong>{userLabel === '사용자' ? '' : userLabel}</strong> {response.content}
                 </p>
               </div>
             );
@@ -104,10 +108,11 @@ export const Chatbot: FunctionComponent = () => {
             onCompositionStart={handleCompositionStart}
             onCompositionEnd={handleCompositionEnd}
           />
-          <Button onClick={handleQuestion} label={'보내기'} className={'w-[150px] font-[20px] bg-[#7744ED] text-white font-pretendard'}/>
+          <Button onClick={handleQuestion} label={'보내기'}
+                  className={'w-[150px] font-[20px] bg-[#7744ED] text-white font-pretendard'}/>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
