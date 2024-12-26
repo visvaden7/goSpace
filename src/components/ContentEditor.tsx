@@ -1,8 +1,9 @@
 import {useState} from "react";
 import {Button} from "./Button.tsx";
-// import mockUpImage from "/src/assets/images/astranaut_profile1.png";
+
 import {generateImage} from "../api/generateImageApi.ts";
 import {summaryContext} from "../api/ChatbotApi.ts";
+import reload from '../assets/images/ic_undo.svg'
 
 interface Props {
   contents: {
@@ -11,63 +12,81 @@ interface Props {
   }
   onEdit: (updateText: string, idx: number) => void;
   onImageAdd: (image: string) => void;
+  onCheckAdd: (idx: number) => void;
 }
 
-export const ContentEditor = ({contents: {text, idx}, onEdit, onImageAdd}:Props) => {
+export const ContentEditor = ({contents: {text, idx}, onEdit, onImageAdd, onCheckAdd}:Props) => {
   const [imageList, setImageList] = useState<string[]>([]);
   const [isReadOnly, setIsReadOnly] = useState(false);
   const [isText, setIsText] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   
   const createImage = async (prompt: string) => {
-    //TODO: 이미지 생성 API
-    console.log("prompt" , prompt)
-    const summarizedPrompt = await summaryContext(prompt) || prompt
-    console.log('summarized', summarizedPrompt)
-    const response = await generateImage(summarizedPrompt)
-    // const response = mockUpImage
-    if(response && imageList.length < 3){
-      onImageAdd(response)
-      setImageList(prev => [...prev, response]);
+    if(imageList.length === 3) {
+      alert("이미지는 3번만 만들 수 있어요.")
+      return;
+    }
+    setIsLoading(true)
+    if(isLoading) {
+      alert('이미지를 만들고 있어요. 조금만 기다려 주세요.')
+      return;
+    }
+    try {
+      const summarizedPrompt = await summaryContext(prompt) || prompt
+      const response = await generateImage(summarizedPrompt)
+      if(response && imageList.length < 3){
+        onImageAdd(response)
+        setImageList(prev => [...prev, response]);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   }
 
-  const handleChangeContent = async (prompt:string) => {
+  const handleChangeContent = async (prompt:string, idx: number) => {
     setIsText(!isText)
     setIsReadOnly(true);
+    setIsLoading(true);
     const response = await generateImage(prompt)
-    if(response)onImageAdd(response)
-    if(response) setImageList(prev => [...prev, response])
+    if(response){
+      onCheckAdd(idx)
+      onImageAdd(response)
+      setImageList(prev => [...prev, response])
+    }
+    setIsLoading(false)
   }
+  
   return (
-    <div className={'flex gap-[47px]'}>
+    <div className={'flex justify-between gap-10'}>
       <textarea
         defaultValue={text}
         onChange={(e) => onEdit(e.target.value, idx)}
         className={
-          'w-[512px] h-[172px] bg-[#EDEDED] resize-none p-4 rounded-lg'
+          'w-[512px] h-[346px] bg-[#EDEDED] font-pretendard font-bold text-black resize-none p-4'
         }
         readOnly={isReadOnly}
       />
       
       {
         isText ? (
-          <div className={'w-[30%] flex justify-between'}>
-            <Button label={isReadOnly ? '수정하고 싶어요' : '수정X'}
-                    className={'w-[160px] aspect-[1/1] bg-[#F9F162] rounded-full'}
+          <div className={'w-[346px] flex justify-end items-center'}>
+            <Button label={isReadOnly ? '더 수정하고 싶어요' : '수정완료'}
+                    className={`w-[160px] h-[160px] ${!isReadOnly ? 'bg-[#F9F162]' : 'bg-[#EDEDED]'} rounded-full`}
                     onClick={() => setIsReadOnly(!isReadOnly)}/>
-            <Button label={'완벽해요'} className={'w-[160px] aspect-[1/1] bg-[#7744ED] rounded-full ml-[20px]'}
-                    onClick={() => handleChangeContent(text)}/>
+            <Button label={'완벽해요'} className={`w-[160px] h-[160px] ${isReadOnly ? 'bg-[#7744ED]' : 'bg-[#EDEDED]'} rounded-full ml-[20px]`}
+                    onClick={() => isReadOnly ? handleChangeContent(text, idx) : alert('‘수정 완료’ 버튼을 누른 후 이미지를 만들 수 있어요.')}/>
           </div>
         ) : (
-          <div className={'flex'}>
-            <div>
-              <img src={imageList[imageList.length - 1]} alt="" className={'w-[300px]'}/>
+          <div className={'flex flex-col justify-end'}>
+            <div className={''}>
+              <img src={isLoading ? '/data/loading_image.gif' : imageList[imageList.length - 1]} alt="" className={'w-[346px] h-[346px]'}/>
             </div>
-            <Button label={'(이미지)새로고침'} className={'w-[160px] aspect-[1/1] bg-[#F9F162] rounded-full'}
-                    onClick={() => createImage(text)}/>
-            <Button label={'(이미지)완벽해요'} className={'w-[160px] aspect-[1/1] bg-[#7744ED] rounded-full'}
-                    onClick={() => console.log('완벽')}/>
-            {imageList.length} / 3
+            <div className={'flex justify-end mt-[12px]'} onClick={() => createImage(text)}>
+              <img src={reload} alt={'reload'} className={'w-[24px] h-[24px]'}/>
+              <p className={'text-black ml-[10px]'}>{imageList.length} / 3</p>
+            </div>
           </div>
         )
       }

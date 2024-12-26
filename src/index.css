@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  margin: 0 auto;
+  max-width: 1920px;
+  max-height: 1080px;
   line-height: 1.5;
-  font-weight: 400;
-
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
@@ -31,12 +31,29 @@ body {
   display: flex;
   place-items: center;
   justify-content: center;
+  max-width: 1920px;
+  max-height: 1080px;
   min-width: 320px;
   min-height: 100vh;
-  background: #2A1A66 url("/src/assets/images/goSpace_background.png") center 30% / 120% no-repeat;
+  background: #2A1A66 url("/public/data/goSpace_background.png") center center / cover no-repeat;
 }
 
+@layer utilities {
+  /* 웹킷 기반 스크롤바 숨기기 */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 
+  /* Firefox에서 스크롤바 숨기기 */
+  .no-scrollbar {
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
+.container {
+  width: 1920px;
+  height: 1080px;
+}
 
 h1 {
   font-size: 3.2em;
