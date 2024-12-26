@@ -70,14 +70,14 @@ const Home: FunctionComponent = () => {
           className="w-[100px] mb-[-6%] z-10"
         />
         {isNext ? (
-          // isNext가 true인 경우
+          // isNext 가 true 인 경우
           <Button
             label="시작해볼까?"
             className="w-[296px] h-[86px] bg-gradient-to-br from-[#FFFB72] to-[#D3B600] text-black font-bold text-2xl rounded-[43px] shadow-lg hover:shadow-2xl"
             onClick={handleNext}
           />
         ) : (
-          // isNext가 false인 경우
+          // isNext 가 false 인 경우
           <Link to="/chatbot">
             <Button
               label="하르와 PPT 만들기"
