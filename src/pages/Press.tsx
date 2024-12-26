@@ -44,14 +44,6 @@ export const Press: FunctionComponent = () => {
       console.error('에러 발생:', error);
     }
   };
-  // const checkPress = async () => {
-  //   try {
-  //     const response = await createPress(text[0])
-  //     if (response) return (JSON.parse(response)[0])
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // }
   
   const checkPress = async (retries = 3) => {
     for (let attempt = 1; attempt <= retries; attempt++) {
@@ -63,16 +55,10 @@ export const Press: FunctionComponent = () => {
             if (typeof parsedResponse === "object" && parsedResponse !== null) {
               return parsedResponse[0];
             }
-            // else {
-            //   console.warn("Invalid JSON object:", parsedResponse);
-            // }
           } catch (parseError) {
             console.error("JSON parse failed:", parseError);
           }
         }
-        // else {
-        //   console.warn("No response received");
-        // }
       } catch (err) {
         console.error(`Attempt ${attempt} failed:`, err);
       }
@@ -88,7 +74,7 @@ export const Press: FunctionComponent = () => {
         // setCapturedImage(res);
         return await captureElementToBlobUrl(captureDiv.current)
       } catch (err) {
-        console.log('캡처 실패:', err);
+        console.error('캡처 실패:', err);
       }
     }
   };
@@ -111,11 +97,9 @@ export const Press: FunctionComponent = () => {
           });
           setModifiedImage(fetchedData.imageUrls[0].replace(SERVER_URL, ''))
         }
-        console.log("object : ", typeof(pressData) === 'object')
-        if (pressData && typeof(pressData) === 'object') {
+        if (pressData && typeof (pressData) === 'object') {
           setPress(pressData);
         } else {
-          console.log("test")
           setPress(await checkPress())
         }
       } catch (err) {
@@ -142,48 +126,54 @@ export const Press: FunctionComponent = () => {
   };
   
   return (
-    <div ref={captureDiv}>
+    <div className={'relative h-full overflow-hidden'} ref={captureDiv}>
       <p className={'text-[32px] font-nanumSquareRoundEB text-white text-center mb-[32px]'}>너희가 너무 자랑스러워!
         2040년엔 아마도 이런 뉴스가 나올거야!</p>
-      <div
-        className={`relative flex w-[960px] h-[836px] ${isLoading ? 'bg-[#001F34] items-center justify-center' : 'bg-white justify-between'} rounded-[30px] mx-auto overflow-hidden`}>
-        {isLoading ? (
+      {isLoading ? (
+        <div
+          className={`relative flex w-[40%] h-[80%] bg-[#001F34] items-center justify-center rounded-[30px] mx-auto overflow-hidden`}>
           <div className={'relative w-[820px] h-[802px]'}>
-            <img src={LOADING_IMAGE} alt={'loading'} className={'absolute w-full h-full'} />
-            <img src={'/data/star.png'} alt={'loading'} className={'absolute w-full h-full'} />
+            <img src={LOADING_IMAGE} alt={'loading'} className={'absolute w-full h-full scale-90'}/>
+            <img src={'/data/star.png'} alt={'loading'} className={'absolute w-full h-full'}/>
           </div>
-        ) : (
-          <div className={'p-[40px]'}>
-            <div className={'flex flex-col w-[620px] relative text-black leading-[30px] border-l-black'}>
+        </div>
+      ) : (
+        <div
+          className={`relative flex w-[50%] h-[85%] bg-white justify-between rounded-[30px] mx-auto overflow-hidden`}>
+          <div className={'p-[40px] w-[60%]'}>
+            <div className={'relative flex flex-col w-[620px] text-black leading-[30px] border-l-black'}>
               <div className="absolute right-[-40px] top-0 h-[95%] w-[4px] bg-[#EDEDED] z-10]"></div>
-              <strong><p className={'font-pretendard  h-[43px] text-[36px] mb-[30px]'}>{press['기사제목'] || '기사제목'}</p>
+              <strong><p className={'font-pretendard  h-[43px] text-[36px] mb-[20px]'}>{press['기사제목'] || '기사제목'}</p>
               </strong>
-              <p className={'font-pretendard'}>{press['기자이름']}</p>
-              <p className={'font-pretendard'}>{`입력: ${press['기사일자']}`}</p>
+              <p className={'font-pretendard font-[12px]'}>{press['기자이름']}</p>
+              <p className={'font-pretendard font-[12px]'}>{`입력: ${press['기사일자']}`}</p>
               <div className={'w-[100%] h-[1%] bg-[#EDEDED] mt-[10px]'}>{''}</div>
               <div className={'flex items-center'}>
-                <div className={'w-[8px] h-[20px] bg-[#EDEDED] mr-[20px]'}></div>
-                <strong><p className={'font-pretendard  text-[20px] my-[30px]'}>{press['기사개요'] || '기사개요'}</p></strong>
+                <div className={'w-[8px] h-[50px] bg-[#EDEDED] mr-[20px]'}></div>
+                <strong><p
+                  className={'font-pretendard text-[20px] my-[15px] break-keep'}>{press['기사개요'] || '기사개요'}</p>
+                </strong>
               </div>
               <div className={'flex justify-center'}>
                 <img crossOrigin={'anonymous'} src={`https://aichal.aixstudio.kr/api/${modifiedImage}`} alt=""
-                     className={'w-[300px] aspect-square'}/>
+                     className={'w-[200px] aspect-square'}/>
               </div>
-              <p className={'font-pretendard break-keep mt-[10px]'}>{press['기사본문'] || '기사본문'}</p>
+              <p className={'font-pretendard break-keep mt-[5px]'}>{press['기사본문'] || '기사본문'}</p>
             </div>
             <div>
               <img src={character4} alt={'character1'} className={'absolute bottom-10 right-[100px] w-[132px] z-10'}/>
               <div className={'absolute bottom-[60px] right-5'}>
                 <div className={'relative'} onClick={handleNext}>
                   <img src={arrow} alt={'arrow'} className={'absolute bottom-[35%] right-[40px] w-[30px] h-[30px]'}/>
-                  <div className={'w-[134px] h-[86px] bg-gradient-to-br from-[#FFFB72] to-[#D3B600] rounded-tl-none rounded-tr-[43px] rounded-br-[43px] rounded-bl-none" z-10'}>
+                  <div
+                    className={'w-[134px] h-[86px] bg-gradient-to-br from-[#FFFB72] to-[#D3B600] rounded-tl-none rounded-tr-[43px] rounded-br-[43px] rounded-bl-none" z-10'}>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

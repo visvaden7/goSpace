@@ -1,4 +1,4 @@
-import {FunctionComponent, useEffect, useState} from 'react';
+import {FunctionComponent, useState} from 'react';
 import { Button } from '../components/Button.tsx';
 import character1 from '../assets/images/charac1.svg';
 import goSpaceButton from '../assets/images/goSpace.svg';
@@ -24,22 +24,13 @@ export const Download: FunctionComponent = () => {
   
   const [introduceText] = useState(introduceMentions[0]);
   
-  useEffect(() => {
-    console.log("test",location)
-    console.log(text)
-    console.log(imageList)
-  }, []);
-  
-  const handleDownload = () => {
-    console.log("test",location)
-    console.log(text)
-    console.log(imageList)
-    downloadFilesAsZip(typeof(text) === 'string' ? text : text.join(), imageList).then(res => console.log(res) )
+  const handleDownload = async () => {
+    await downloadFilesAsZip(typeof(text) === 'string' ? text : text.join(), imageList)
     // setIntroduction(introduceMentions[1])
   }
   
   return (
-    <div className="flex justify-center h-[800px] relative overflow-hidden mt-[120px]">
+    <div className="flex justify-center h-[86%] relative overflow-hidden mt-[5.65%]">
       {/* 캐릭터 이미지 */}
           <img
             src={character1}
@@ -48,7 +39,7 @@ export const Download: FunctionComponent = () => {
           />
         {/* 텍스트 박스 */}
         <div
-        className="flex items-center justify-center w-[960px] h-[540px] bg-gradient-to-b from-[#FFFFFF] to-[#DCCDFF] text-black rounded-[43px] border-[10px] border-[#AD83FF] shadow-2xl p-8">
+        className="flex items-center justify-center w-[50%] h-[70%] bg-gradient-to-b from-[#FFFFFF] to-[#DCCDFF] text-black rounded-[43px] border-[10px] border-[#AD83FF] shadow-2xl p-8">
         <div className="whitespace-pre-line font-nanumSquareRoundEB font-extrabold text-[40px] leading-[60px] text-center">
           {introduceText}
         </div>
@@ -63,7 +54,7 @@ export const Download: FunctionComponent = () => {
         />
           <Button
             label="다운로드"
-            className="w-[296px] h-[86px] bg-gradient-to-br from-[#FFFB72] to-[#D3B600] text-black font-bold text-2xl rounded-[43px]"
+            className="w-[296px] h-[86px] bg-gradient-to-br from-[#FFFB72] to-[#D3B600] text-black font-bold text-2xl rounded-[43px] shadow-lg hover:shadow-2xl"
             onClick={handleDownload}
           />
       </div>

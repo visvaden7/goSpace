@@ -17,7 +17,7 @@ export const Chatbot: FunctionComponent = () => {
     if (messages.length > 0 && conservationContainerRef.current) {
       const scrollElement = conservationContainerRef.current;
       scrollElement.scrollTop = scrollElement.scrollHeight;
-      console.log("test",scrollElement.scrollTop, scrollElement.scrollHeight)
+      // console.log("test",scrollElement.scrollTop, scrollElement.scrollHeight)
     }
   }, [messages]);
   
@@ -63,12 +63,12 @@ export const Chatbot: FunctionComponent = () => {
   };
   
   return (
-    <div className={'relative'}>
+    <div className={'relative w-full h-[700px]'}>
       <div className='absolute w-[30%] left-[0%] top-[10%] animate-slow-floating-rotating'>
         <img src={character} alt={'character'}/>
       </div>
       <div
-        className="relative flex flex-col w-[960px] h-[836px] mx-auto mt-[42px] bg-gradient-to-b from-[#FFFFFF] to-[#DCCDFF] text-black rounded-[30px] shadow-2xl p-4">
+        className="relative flex flex-col w-[50%] h-[100%] mx-auto mt-[42px] bg-gradient-to-b from-[#FFFFFF] to-[#DCCDFF] text-black rounded-[30px] shadow-2xl p-4">
         <div className="responses my-10 h-full overflow-y-scroll" ref={conservationContainerRef}>
           {messages.map((response, index) => {
             if (response.role === 'system') {

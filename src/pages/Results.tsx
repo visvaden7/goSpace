@@ -15,8 +15,13 @@ export const Results: FunctionComponent = () => {
   const [isLoading, setIsLoading] = useState(false)
   
   const handleClickNext = (idx: number) => {
-    console.log("idx",idx)
-    setCheckList(prev => [...prev, idx])
+    setCheckList(prev => {
+      if(!prev.includes(idx)){
+        return [...prev, idx]
+      }
+      console.log(prev)
+      return prev
+    })
   }
   
   useEffect(() => {
@@ -26,11 +31,11 @@ export const Results: FunctionComponent = () => {
         if (res) {
           let result = ''
           result += res
-          const slides = result.split('---')
+          const slides = result.split('---').filter(it => it !== '')
           setContents(slides)
           setIsLoading(false)
         } else {
-          console.log('데이터가 없습니다.')
+          console.error('데이터가 없습니다.')
         }
       })
     }
@@ -56,15 +61,15 @@ export const Results: FunctionComponent = () => {
   
   
   return (
-    <div>
+    <div className={'relative h-full overflow-hidden'}>
       <p className={'mb-[30px] mt-[40px] text-[40px] font-nanumSquareRoundEB text-center text-white'}>이렇게 정리해봤는데 어때?</p>
       {isLoading ?
         (
           <div
-            className={'relative flex w-[50%] h-[75%] rounded-[30px] bg-[#001F34] mx-auto overflow-hidden items-center justify-center'}>
-            <div className={'relative w-[820px] h-[802px]'}>
-              <img src={'/data/loading.gif'} alt={'loading'} className={'absolute w-full h-full'}/>
-              <img src={'/data/star.png'} alt={'loading_star'} className={'absolute w-full h-full'}/>
+            className={'relative w-[40%] h-[75%] rounded-[30px] bg-[#001F34] mx-auto mt-20 overflow-hidden'}>
+            <div className={'relative flex w-full h-full items-center justify-center'}>
+              <img src={'/data/loading.gif'} alt={'loading'} className={'absolute object-cover'}/>
+              <img src={'/data/star.png'} alt={'loading_star'} className={'absolute object-cover'}/>
             </div>
           </div>
         ) : (
