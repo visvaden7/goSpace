@@ -2,10 +2,10 @@ import {FunctionComponent, useEffect, useRef, useState} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import {createPress} from "../api/ChatbotApi.ts";
-import {Button} from "../components/Button.tsx";
-import character4 from '../assets/images/charac4.png'
+import character4 from '../assets/images/charac4.svg'
 import {captureElementToBlobUrl} from "../utils/capturePage.ts";
 import {LOADING_IMAGE, SERVER_URL} from "../const/const.ts";
+import arrow from '../assets/images/ic_arrow.svg'
 
 interface PressType {
   '기사제목': string,
@@ -44,14 +44,43 @@ export const Press: FunctionComponent = () => {
       console.error('에러 발생:', error);
     }
   };
-  const checkPress = async () => {
-    try {
-      const response = await createPress(text[0])
-      if (response) return (JSON.parse(response)[0])
-    } catch (err) {
-      console.log(err)
+  // const checkPress = async () => {
+  //   try {
+  //     const response = await createPress(text[0])
+  //     if (response) return (JSON.parse(response)[0])
+  //   } catch (err) {
+  //     console.log(err)
+  //   }
+  // }
+  
+  const checkPress = async (retries = 3) => {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        const response = await createPress(text[0]);
+        if (response) {
+          try {
+            const parsedResponse = JSON.parse(response);
+            if (typeof parsedResponse === "object" && parsedResponse !== null) {
+              return parsedResponse[0];
+            }
+            // else {
+            //   console.warn("Invalid JSON object:", parsedResponse);
+            // }
+          } catch (parseError) {
+            console.error("JSON parse failed:", parseError);
+          }
+        }
+        // else {
+        //   console.warn("No response received");
+        // }
+      } catch (err) {
+        console.error(`Attempt ${attempt} failed:`, err);
+      }
+      // 지연 후 재시도
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
-  }
+    throw new Error("Failed to fetch valid JSON response after retries");
+  };
   
   const capturePress = async () => {
     if (captureDiv.current) {
@@ -73,6 +102,7 @@ export const Press: FunctionComponent = () => {
           fetchData(),
           checkPress()
         ])
+        
         if (fetchedData) {
           setData({
             text: fetchedData.text || '',
@@ -81,8 +111,12 @@ export const Press: FunctionComponent = () => {
           });
           setModifiedImage(fetchedData.imageUrls[0].replace(SERVER_URL, ''))
         }
-        if (pressData) {
+        console.log("object : ", typeof(pressData) === 'object')
+        if (pressData && typeof(pressData) === 'object') {
           setPress(pressData);
+        } else {
+          console.log("test")
+          setPress(await checkPress())
         }
       } catch (err) {
         console.error('데이터 로딩 실패 : ', err)
@@ -109,13 +143,14 @@ export const Press: FunctionComponent = () => {
   
   return (
     <div ref={captureDiv}>
-      <p className={'text-[32px] font-nanumSquareRound font-extrabold text-white text-center mb-[32px]'}>너희가 너무 자랑스러워!
+      <p className={'text-[32px] font-nanumSquareRoundEB text-white text-center mb-[32px]'}>너희가 너무 자랑스러워!
         2040년엔 아마도 이런 뉴스가 나올거야!</p>
       <div
-        className={`flex w-[960px] h-[836px] relative ${isLoading ? 'bg-cover bg-black items-center justify-center' : 'bg-white'} rounded-[30px] mx-auto justify-between overflow-hidden`}>
+        className={`relative flex w-[960px] h-[836px] ${isLoading ? 'bg-[#001F34] items-center justify-center' : 'bg-white justify-between'} rounded-[30px] mx-auto overflow-hidden`}>
         {isLoading ? (
-          <div className={'w-full'}>
-            <img src={LOADING_IMAGE} alt={'loading'} className={'w-full h-full'}/>
+          <div className={'relative w-[820px] h-[802px]'}>
+            <img src={LOADING_IMAGE} alt={'loading'} className={'absolute w-full h-full'} />
+            <img src={'/data/star.png'} alt={'loading'} className={'absolute w-full h-full'} />
           </div>
         ) : (
           <div className={'p-[40px]'}>
@@ -139,8 +174,11 @@ export const Press: FunctionComponent = () => {
             <div>
               <img src={character4} alt={'character1'} className={'absolute bottom-10 right-[100px] w-[132px] z-10'}/>
               <div className={'absolute bottom-[60px] right-5'}>
-                <Button label={'>>'} onClick={handleNext}
-                        className={'w-[134px] h-[86px] bg-gradient-to-br from-[#FFFB72] to-[#D3B600] rounded-tl-none rounded-tr-[43px] rounded-br-[43px] rounded-bl-none" z-10'}/>
+                <div className={'relative'} onClick={handleNext}>
+                  <img src={arrow} alt={'arrow'} className={'absolute bottom-[35%] right-[40px] w-[30px] h-[30px]'}/>
+                  <div className={'w-[134px] h-[86px] bg-gradient-to-br from-[#FFFB72] to-[#D3B600] rounded-tl-none rounded-tr-[43px] rounded-br-[43px] rounded-bl-none" z-10'}>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

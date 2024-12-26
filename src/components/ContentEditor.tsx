@@ -3,7 +3,7 @@ import {Button} from "./Button.tsx";
 
 import {generateImage} from "../api/generateImageApi.ts";
 import {summaryContext} from "../api/ChatbotApi.ts";
-import reload from '../assets/images/ic_undo@2x.png'
+import reload from '../assets/images/ic_undo.svg'
 
 interface Props {
   contents: {
@@ -12,9 +12,10 @@ interface Props {
   }
   onEdit: (updateText: string, idx: number) => void;
   onImageAdd: (image: string) => void;
+  onCheckAdd: (idx: number) => void;
 }
 
-export const ContentEditor = ({contents: {text, idx}, onEdit, onImageAdd}:Props) => {
+export const ContentEditor = ({contents: {text, idx}, onEdit, onImageAdd, onCheckAdd}:Props) => {
   const [imageList, setImageList] = useState<string[]>([]);
   const [isReadOnly, setIsReadOnly] = useState(false);
   const [isText, setIsText] = useState(true);
@@ -44,12 +45,13 @@ export const ContentEditor = ({contents: {text, idx}, onEdit, onImageAdd}:Props)
     }
   }
 
-  const handleChangeContent = async (prompt:string) => {
+  const handleChangeContent = async (prompt:string, idx: number) => {
     setIsText(!isText)
     setIsReadOnly(true);
     setIsLoading(true);
     const response = await generateImage(prompt)
     if(response){
+      onCheckAdd(idx)
       onImageAdd(response)
       setImageList(prev => [...prev, response])
     }
@@ -74,7 +76,7 @@ export const ContentEditor = ({contents: {text, idx}, onEdit, onImageAdd}:Props)
                     className={`w-[160px] h-[160px] ${!isReadOnly ? 'bg-[#F9F162]' : 'bg-[#EDEDED]'} rounded-full`}
                     onClick={() => setIsReadOnly(!isReadOnly)}/>
             <Button label={'완벽해요'} className={`w-[160px] h-[160px] ${isReadOnly ? 'bg-[#7744ED]' : 'bg-[#EDEDED]'} rounded-full ml-[20px]`}
-                    onClick={() => isReadOnly ? handleChangeContent(text) : alert('‘수정 완료’ 버튼을 누른 후 이미지를 만들 수 있어요.')}/>
+                    onClick={() => isReadOnly ? handleChangeContent(text, idx) : alert('‘수정 완료’ 버튼을 누른 후 이미지를 만들 수 있어요.')}/>
           </div>
         ) : (
           <div className={'flex flex-col justify-end'}>
