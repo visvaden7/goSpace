@@ -11,7 +11,7 @@ const openai = new OpenAI({
 
 const chatApi = async ( messages: Message[], model: string, maxToken?:number) => {
   try {
-    console.log(messages);
+    // console.log(messages);
     const response = await openai.chat.completions.create({
       model: model,
       messages: messages,

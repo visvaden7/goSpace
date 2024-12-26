@@ -10,7 +10,6 @@
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -35,7 +34,7 @@ body {
   max-height: 1080px;
   min-width: 320px;
   min-height: 100vh;
-  background: #2A1A66 url("/public/data/goSpace_background.png") center center / cover no-repeat;
+  background: #2A1A66 url("/public/data/goSpace_background.png") center center / contain no-repeat;
 }
 
 @layer utilities {

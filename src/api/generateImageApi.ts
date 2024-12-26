@@ -58,7 +58,7 @@ export const generateImage = async (prompt:string) => {
       size: "1024x1024", // 이미지 크기 설정
       n: 1,
     });
-    console.log(response.data[0].url);
+    // console.log(response.data[0].url);
     return response.data[0].url
   } catch (err) {
     console.error('OpenAPI error 1: ', err);
