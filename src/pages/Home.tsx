@@ -5,7 +5,7 @@ import character1 from '../assets/images/charac1.svg';
 import character2 from '../assets/images/charac2.svg';
 import goSpaceButton from '../assets/images/goSpace.svg';
 
-const introduceMentions = [
+const Home_introduceMentions = [
   <>
     <p>
       안녕? 나는 <span className="text-[#7744ED]">인공지능 비서 하르야~!</span>
@@ -26,12 +26,12 @@ const introduceMentions = [
 ];
 
 const Home: FunctionComponent = () => {
-  const [introduceText, setIntroduction] = useState(introduceMentions[0]);
+  const [introduceText, setIntroduction] = useState(Home_introduceMentions[0]);
   const [isNext, setIsNext] = useState(true);
   
   const handleNext = () => {
     setIsNext(false)
-    setIntroduction(introduceMentions[1])
+    setIntroduction(Home_introduceMentions[1])
   }
   
   return (

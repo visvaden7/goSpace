@@ -3,3 +3,12 @@ export type Message = {
   role: "system" | "user" | "assistant";
   content: string;
 };
+
+export interface LocationStateType {
+  contents: string | string[],
+  imageList: string[],
+}
+
+export interface BotResponseType {
+  response: string
+}

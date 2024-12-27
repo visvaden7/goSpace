@@ -4,10 +4,11 @@ import {createMd} from "../api/ChatbotApi.ts";
 import {ContentEditor} from "../components/ContentEditor.tsx";
 import {Button} from "../components/Button.tsx";
 import character1 from '../assets/images/charac1.svg';
+import {BotResponseType} from "../@types/domain.ts";
 
 export const Results: FunctionComponent = () => {
   const location = useLocation();
-  const response = location.state?.response || ''
+  const { response } = location.state as BotResponseType
   const navigate = useNavigate()
   const [contents, setContents] = useState<string[]>([]);
   const [imageList, setImageList] = useState<string[]>([]);
@@ -16,7 +17,7 @@ export const Results: FunctionComponent = () => {
   
   const handleClickNext = (idx: number) => {
     setCheckList(prev => {
-      if(!prev.includes(idx)){
+      if (!prev.includes(idx)) {
         return [...prev, idx]
       }
       console.log(prev)
@@ -28,29 +29,31 @@ export const Results: FunctionComponent = () => {
     if (response) {
       setIsLoading(true)
       createMd(response).then(res => {
-        if (res) {
-          let result = ''
-          result += res
-          const slides = result.split('---').filter(it => it !== '')
-          setContents(slides)
+          if (res) {
+            const slides = res.split('---').filter(it => it !== '')
+            setContents(slides)
+          } else {
+            console.error('데이터가 없습니다.')
+          }
+        })
+        .catch((err) => {
+          console.error('데이터 로드 실패 : ', err)
+        })
+        .finally(() => {
           setIsLoading(false)
-        } else {
-          console.error('데이터가 없습니다.')
-        }
-      })
+        })
     }
   }, [response])
-  //TODO: API: 이미지를 불러내는 API
-  //TODO: 파일 다운로드 기능 -> text, png, pdf
   
   const handleSendData = () => {
-    //TODO: 조건변경
-    
-    if(checkList.length < 6) {
+    if (checkList.length < 6) {
       alert('이미지 생성 후, 진행 가능합니다.')
       return;
     }
-    navigate('/press',{state: {response: {contents: contents, imageList: imageList}}})
+    navigate('/press', {
+      state:
+        {response: {contents: contents, imageList: imageList}}
+    })
   }
   
   const handleEditContents = (text: string, idx: number) => {
@@ -74,7 +77,7 @@ export const Results: FunctionComponent = () => {
           </div>
         ) : (
           <div className={'relative h-screen overflow-hidden'}>
-            <img src={character1} alt={'haru'} className={'absolute bottom-[40%] left-[10%] animate-floating'}/>
+            <img src={character1} alt={'하르'} className={'absolute bottom-[40%] left-[10%] animate-floating'}/>
             <div
               className={'flex flex-col w-[50%] h-[75%] bg-white p-[40px] rounded-[30px] gap-10 mx-auto shadow-custom-xl overflow-y-scroll'}>
               {contents.map((content, idx) => {
