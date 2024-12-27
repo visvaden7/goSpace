@@ -1,42 +1,48 @@
-import {FunctionComponent, CompositionEvent ,KeyboardEvent, useEffect, useRef, useState} from 'react';
+import {CompositionEvent, FunctionComponent, KeyboardEvent, useEffect, useRef, useState} from 'react';
 import {Message} from '../@types/domain.ts';
 import {chatbotBlockStylesByRole, initMessage} from "../const/const.ts";
 import {Button} from "./Button.tsx";
 import {responseChat} from "../api/ChatbotApi.ts";
 import character from './../assets/images/haru.png'
-import { useNavigate } from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 
 export const Chatbot: FunctionComponent = () => {
   const [messages, setMessages] = useState<Message[]>(initMessage);
   const [input, setInput] = useState<string>('');
   const [isComposing, setIsComposing] = useState(false)
   const conservationContainerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null)
   const navigate = useNavigate()
   
   useEffect(() => {
     if (messages.length > 0 && conservationContainerRef.current) {
       const scrollElement = conservationContainerRef.current;
       scrollElement.scrollTop = scrollElement.scrollHeight;
-      // console.log("test",scrollElement.scrollTop, scrollElement.scrollHeight)
     }
   }, [messages]);
+  
+  useEffect(() => {
+    if(inputRef.current){
+      inputRef.current.focus();
+    }
+  }, []);
   
   const handleQuestion = async () => {
     const trimmedInput = input.trim()
     
-    if (trimmedInput){
-      const updatedMessages:Message[] = [
+    if (trimmedInput) {
+      const updatedMessages: Message[] = [
         ...messages,
-        { role: 'user', content: trimmedInput }
+        {role: 'user', content: trimmedInput}
       ];
       setMessages(updatedMessages);
       setInput(''); // 입력창 초기
       
       // const botResponse = await responseChat(`questionList : ${questionMapping[matchedKeyword]} input: ${trimmedInput}`);
       const botResponse = await responseChat(updatedMessages);
-      if(botResponse) {
-        if(botResponse.includes('결과정리')){
-          navigate('/results',{state: {response: botResponse}})
+      if (botResponse) {
+        if (botResponse.includes('결과정리')) {
+          navigate('/results', {state: {response: botResponse}})
         }
         setMessages(prev => [...prev, {role: 'assistant', content: botResponse}])
       }
@@ -44,11 +50,11 @@ export const Chatbot: FunctionComponent = () => {
   }
   
   const handleKeyDown = async (e: KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Enter') {
-        e.preventDefault()
-        if (input.trim() && !isComposing) {
-          await handleQuestion(); // 엔터 키가 눌리면 질문 처리
-        }
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      if (input.trim() && !isComposing) {
+        await handleQuestion(); // 엔터 키가 눌리면 질문 처리
+      }
     }
   }
   
@@ -63,7 +69,7 @@ export const Chatbot: FunctionComponent = () => {
   };
   
   return (
-    <div className={'relative w-full h-[700px]'}>
+    <div className={'relative w-full h-[90%]'}>
       <div className='absolute w-[30%] left-[0%] top-[10%] animate-slow-floating-rotating'>
         <img src={character} alt={'character'}/>
       </div>
@@ -74,11 +80,9 @@ export const Chatbot: FunctionComponent = () => {
             if (response.role === 'system') {
               return null;
             }
-            
             const isAssistant = response.role === 'assistant'
             const {messageClass, userLabel, profile} = chatbotBlockStylesByRole[response.role] || {}
             const profileClass = 'chatbot-profile rounded-full w-[100px]';
-            
             return (
               <div
                 className={`flex items-center gap-6 mb-[67px] mx-10 ${isAssistant ? 'flex-row' : 'flex-row-reverse'}`}
@@ -101,6 +105,7 @@ export const Chatbot: FunctionComponent = () => {
           <input
             type="text"
             value={input}
+            ref={inputRef}
             onChange={(e) => setInput(e.target.value)}
             placeholder="질문을 입력하세요."
             className="p-4 w-full bg-white font-pretendard"
@@ -115,7 +120,3 @@ export const Chatbot: FunctionComponent = () => {
     </div>
   );
 };
-
-//우주복
-//팀명: 123, 팀원 1,2,3,
-//1: 발표, 2:자료정리, 3:으쓱대기

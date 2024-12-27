@@ -1,4 +1,4 @@
-import {FunctionComponent, useEffect, useRef, useState} from 'react';
+import {FunctionComponent, useCallback, useEffect, useRef, useState} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import {createPress} from "../api/ChatbotApi.ts";
@@ -30,7 +30,9 @@ export const Press: FunctionComponent = () => {
   const captureDiv = useRef<HTMLDivElement>(null)
   // const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [modifiedImage, setModifiedImage] = useState('')
-  const fetchData = async () => {
+  
+  //reuse
+  const fetchData = useCallback(async () => {
     try {
       const serializedText = text.join("&&&");
       const serializedImageList = imageList.join("&&&");
@@ -38,14 +40,15 @@ export const Press: FunctionComponent = () => {
         'https://gn50m.aixstudio.kr/api/space_chal/api_space_chal_save.php',
         {text: serializedText, imageList: serializedImageList}
       );
-      console.log('서버 응답:', response);
+      // console.log('서버 응답:', response);
       return response.data.data
     } catch (error) {
       console.error('에러 발생:', error);
     }
-  };
+  },[text, imageList]);
   
-  const checkPress = async (retries = 3) => {
+  //reuse
+  const getPress = useCallback(async (retries = 5) => {
     for (let attempt = 1; attempt <= retries; attempt++) {
       try {
         const response = await createPress(text[0]);
@@ -66,7 +69,7 @@ export const Press: FunctionComponent = () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
     throw new Error("Failed to fetch valid JSON response after retries");
-  };
+  },[text]);
   
   const capturePress = async () => {
     if (captureDiv.current) {
@@ -79,37 +82,40 @@ export const Press: FunctionComponent = () => {
     }
   };
   
-  
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        setIsLoading(true); // 로딩 시작
-        const [fetchedData, pressData] = await Promise.all([
-          fetchData(),
-          checkPress()
-        ])
-        
-        if (fetchedData) {
-          setData({
-            text: fetchedData.text || '',
-            imageList: Array.isArray(fetchedData.imageUrls) ? fetchedData.imageUrls : [],
-            w_data: fetchedData.w_data || ''
-          });
+  const loadData = useCallback(async () => {
+    try {
+      setIsLoading(true); // 로딩 시작
+      const [fetchedData, pressData] = await Promise.all([
+        fetchData(),
+        getPress()
+      ])
+      
+      if (fetchedData) {
+        const {text = '', imageUrls = [], w_data = ''} = fetchedData;
+        setData({
+          text,
+          imageList: Array.isArray(imageUrls) ? imageUrls : [],
+          w_data
+        });
+        if (Array.isArray(imageUrls) && imageUrls.length > 0) {
           setModifiedImage(fetchedData.imageUrls[0].replace(SERVER_URL, ''))
         }
-        if (pressData && typeof (pressData) === 'object') {
-          setPress(pressData);
-        } else {
-          setPress(await checkPress())
-        }
-      } catch (err) {
-        console.error('데이터 로딩 실패 : ', err)
-      } finally {
-        setIsLoading(false)
       }
+      if (pressData && typeof (pressData) === 'object') {
+        setPress(pressData);
+      } else {
+        setPress(await getPress())
+      }
+    } catch (err) {
+      console.error('데이터 로딩 실패 : ', err)
+    } finally {
+      setIsLoading(false)
     }
-    loadData();
-  }, []);
+  },[fetchData, getPress])
+  
+  useEffect(() => {
+    void loadData();
+  }, [loadData]);
   
   const handleNext = async () => {
     const blobUrl = await capturePress();

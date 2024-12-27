@@ -1,7 +1,7 @@
 import {Message} from "../@types/domain.ts";
 import OpenAI from "openai";
-import {createMdSystemMessage, createPressSystemMessage, systemMessage, userSettingMessage} from "../const/const.ts";
 import {YOUR_OPENAI_API_KEY} from "../const/YOUR_OPENAI_API_KEY.ts";
+import {createMdSystemMessage, createPressSystemMessage, systemMessage, userSettingMessage} from "../const/prompt.ts";
 
 // OpenAI API 설정
 const openai = new OpenAI({
@@ -11,7 +11,6 @@ const openai = new OpenAI({
 
 const chatApi = async ( messages: Message[], model: string, maxToken?:number) => {
   try {
-    // console.log(messages);
     const response = await openai.chat.completions.create({
       model: model,
       messages: messages,
